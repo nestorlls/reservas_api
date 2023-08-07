@@ -1,8 +1,8 @@
 let _userService = null;
 
 class UserController {
-  constructor({ UserSerVice }) {
-    _userService = UserSerVice;
+  constructor({ UserService }) {
+    _userService = UserService;
   }
 
   async update(req, res) {
