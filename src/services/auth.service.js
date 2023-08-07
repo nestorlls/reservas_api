@@ -13,10 +13,10 @@ class AuthService {
     const userExists = await _userService.getByUsername(username);
 
     if (userExists) {
-      throw new Error({
-        status: 409,
-        message: 'User already exists',
-      });
+      const error = new Error();
+      error.status = 401;
+      error.message = 'User already exists';
+      return error;
     }
 
     return await _userService.create(user);
@@ -28,19 +28,19 @@ class AuthService {
     const userExists = await _userService.getByUsername(username);
 
     if (!userExists) {
-      throw new Error({
-        status: 404,
-        message: 'User not found',
-      });
+      const error = new Error();
+      error.status = 401;
+      error.message = 'User does not exist';
+      return error;
     }
 
-    const isPasswordCorrect = userExists.comparePasswords(password);
+    const isPasswordCorrect = await userExists.comparePassword(password);
 
     if (!isPasswordCorrect) {
-      throw new Error({
-        status: 401,
-        message: 'Invalid password',
-      });
+      const error = new Error();
+      error.status = 401;
+      error.message = 'Invalid credentials';
+      return error;
     }
 
     const userToEncode = {
