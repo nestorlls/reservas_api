@@ -5,7 +5,8 @@ const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
 const UserSchema = new Schema(
   {
     username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String },
   },
   {
     timestamps: true,
@@ -22,7 +23,7 @@ UserSchema.methods.comparePassword = function (password) {
   return compareSync(password, this.password);
 };
 
-UserSchema.pre('pre', function (next) {
+UserSchema.pre('save', function (next) {
   const user = this;
 
   if (!user.isModified('password')) {
