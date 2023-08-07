@@ -1,4 +1,5 @@
-const { Schema } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const ReservationSchema = new Schema(
   {
@@ -26,7 +27,7 @@ const ReservationSchema = new Schema(
   { timestamps: true }
 );
 
-Reservation.plugin(require('mongoose-autopopulate'));
+ReservationSchema.plugin(require('mongoose-autopopulate'));
 
 const Reservation = mongoose.model('Reservation', ReservationSchema);
 
