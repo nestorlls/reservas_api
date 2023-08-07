@@ -3,4 +3,5 @@ module.exports = {
   UserService: require('./user.rervice'),
   BookService: require('./book.service'),
   ReservationService: require('./reservation.servicer'),
+  AuthService: require('./auth.service'),
 };
