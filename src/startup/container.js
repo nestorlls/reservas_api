@@ -19,6 +19,7 @@ const {
   UserController,
   BookController,
   ReservationController,
+  AuthController,
 } = require('../controllers');
 
 // routes
@@ -54,6 +55,7 @@ container
     HomeController: asClass(HomeController.bind(HomeController)).singleton(),
     UserController: asClass(UserController.bind(UserController)).singleton(),
     BookController: asClass(BookController.bind(BookController)).singleton(),
+    AuthController: asClass(AuthController.bind(AuthController)).singleton(),
     ReservationController: asClass(
       ReservationController.bind(ReservationController)
     ).singleton(),
