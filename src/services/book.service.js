@@ -7,6 +7,15 @@ class BookService extends BaseService {
     super(BookRepository);
     _bookRepository = BookRepository;
   }
+
+  async createBook(book) {
+    const { title, author, available } = book;
+    return await _bookRepository.create({
+      title,
+      author,
+      available: true,
+    });
+  }
 }
 
 module.exports = BookService;
