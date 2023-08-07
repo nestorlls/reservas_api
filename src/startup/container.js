@@ -10,6 +10,7 @@ const {
   UserService,
   BookService,
   ReservationService,
+  AuthService,
 } = require('../services');
 
 // controllers
@@ -18,6 +19,7 @@ const {
   UserController,
   BookController,
   ReservationController,
+  AuthController,
 } = require('../controllers');
 
 // routes
@@ -47,11 +49,13 @@ container
     UserService: asClass(UserService).singleton(),
     BookService: asClass(BookService).singleton(),
     ReservationService: asClass(ReservationService).singleton(),
+    AuthService: asClass(AuthService).singleton(),
   })
   .register({
     HomeController: asClass(HomeController.bind(HomeController)).singleton(),
     UserController: asClass(UserController.bind(UserController)).singleton(),
     BookController: asClass(BookController.bind(BookController)).singleton(),
+    AuthController: asClass(AuthController.bind(AuthController)).singleton(),
     ReservationController: asClass(
       ReservationController.bind(ReservationController)
     ).singleton(),
