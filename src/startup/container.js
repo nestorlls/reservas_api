@@ -28,6 +28,7 @@ const {
   UserRoutes,
   AuthRoutes,
   BookRoutes,
+  ReservationRoutes,
 } = require('../routes/index.routes');
 const Routes = require('../routes');
 
@@ -70,6 +71,7 @@ container
     UserRoutes: asFunction(UserRoutes).singleton(),
     AuthRoutes: asFunction(AuthRoutes).singleton(),
     BookRoutes: asFunction(BookRoutes).singleton(),
+    ReservationRoutes: asFunction(ReservationRoutes).singleton(),
   })
   .register({
     User: asValue(User),
