@@ -7,21 +7,21 @@ class BookController {
 
   async create(req, res) {
     const { body } = req;
-    const bookCreated = await _bookService.create(body);
+    const bookCreated = await _bookService.createBook(body);
     return res.send(bookCreated);
   }
 
   async update(req, res) {
-    const { bookid } = req.params;
+    const { bookId } = req.params;
     const { body } = req;
 
-    const bookUpdated = await _bookService.update(bookid, body);
+    const bookUpdated = await _bookService.update(bookId, body);
     return res.send(bookUpdated);
   }
 
   async delete(req, res) {
-    const { bookid } = req.params;
-    const bookDeleted = await _bookService.delete(bookid);
+    const { bookId } = req.params;
+    const bookDeleted = await _bookService.delete(bookId);
     return res.send(bookDeleted);
   }
 
@@ -31,8 +31,8 @@ class BookController {
   }
 
   async getById(req, res) {
-    const { bookid } = req.params;
-    const book = await _bookService.getById(bookid);
+    const { bookId } = req.params;
+    const book = await _bookService.getById(bookId);
     return res.send(book);
   }
 }
