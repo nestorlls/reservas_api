@@ -12,7 +12,7 @@ class ReservationRepository extends BaseRepository {
     return await _reservation.find({ user: userId });
   }
 
-  async getBookReservations(bookId) {
+  async getBookReservation(bookId) {
     return await _reservation.find({ book: bookId });
   }
 }

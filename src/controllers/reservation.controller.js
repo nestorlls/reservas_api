@@ -7,10 +7,8 @@ class ReservationController {
 
   async createReservation(req, res) {
     const { body } = req;
-    const { userId, BookId } = req.params;
+
     const reservationCreated = await _reservationService.createReservation(
-      userId,
-      BookId,
       body
     );
 
@@ -20,7 +18,7 @@ class ReservationController {
   async updateReservation(req, res) {
     const { reservationId } = req.params;
     const { body } = req;
-    const reservationUpdated = await _reservationService.update(
+    const reservationUpdated = await _reservationService.updateReservation(
       reservationId,
       body
     );
@@ -29,7 +27,9 @@ class ReservationController {
 
   async deleteReservation(req, res) {
     const { reservationId } = req.params;
-    const reservationDeleted = await _reservationService.delete(reservationId);
+    const reservationDeleted = await _reservationService.deleteReservation(
+      reservationId
+    );
     return res.send(reservationDeleted);
   }
 
@@ -40,7 +40,9 @@ class ReservationController {
 
   async getReservationById(req, res) {
     const { reservationId } = req.params;
-    const reservation = await _reservationService.getById(reservationId);
+    const reservation = await _reservationService.getReservationById(
+      reservationId
+    );
     return res.send(reservation);
   }
 
@@ -50,10 +52,10 @@ class ReservationController {
     return res.send(reservations);
   }
 
-  async getBookReservations(req, res) {
+  async getBookReservation(req, res) {
     const { bookId } = req.params;
-    const reservations = await _reservationService.getBookReservations(bookId);
-    return res.send(reservations);
+    const reservation = await _reservationService.getBookReservation(bookId);
+    return res.send(reservation);
   }
 }
 
