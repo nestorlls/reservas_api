@@ -118,6 +118,13 @@ class ReservationService extends BaseService {
   }
 
   async getBookReservation(bookId) {
+    if (!bookId) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Book id is required';
+      return error;
+    }
+
     const bookFound = await _bookRepository.getById(bookId);
     if (!bookFound) {
       const error = new Error();
