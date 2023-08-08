@@ -14,6 +14,9 @@ module.exports = function ({
 }) {
   const router = express.Router();
   const apiRoutes = express.Router();
+  const swaggerUI = require('swagger-ui-express');
+  const { SWAGGER_PATH } = require('../config');
+  const swaggerDocument = require(SWAGGER_PATH);
 
   router.use(express.json());
   router.use(cors());
@@ -27,6 +30,7 @@ module.exports = function ({
   apiRoutes.use('/reservation', ReservationRoutes);
 
   router.use('/api', apiRoutes);
+  router.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
   router.use(NotFoundMiddleware);
   router.use(ErrorMiddleware);

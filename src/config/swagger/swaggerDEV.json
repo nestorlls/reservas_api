@@ -1,0 +1,826 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Backend API :: Reservas de libros :: App",
+    "version": "1.0.0",
+    "title": "Swagger Reservas de libros"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": ["http", "https"],
+  "paths": {
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Finds All the Users",
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {},
+              "example": [
+                {
+                  "_id": "string",
+                  "username": "string",
+                  "email": "string",
+                  "createdAt": "date",
+                  "updatedAt": "date",
+                  "__v": 0
+                },
+                {
+                  "_id": "string",
+                  "username": "string",
+                  "email": "string",
+                  "createdAt": "date",
+                  "updatedAt": "date",
+                  "__v": 0
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Finds a User",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "user id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "example": {
+                "_id": "string",
+                "username": "string",
+                "email": "string",
+                "createdAt": "date",
+                "updatedAt": "date"
+              }
+            }
+          },
+          "400": {
+            "description": "User does not exist"
+          }
+        }
+      },
+      "put": {
+        "tags": ["User"],
+        "summary": "Update a User",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "user id",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization header for JWT",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "example": {
+                "_id": "string",
+                "username": "string",
+                "email": "string",
+                "createdAt": "date",
+                "updatedAt": "date"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete a User",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "user id",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization header for JWT",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "400": {
+            "description": "User does not exist"
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Singup",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User already exists"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Singin",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/book": {
+      "get": {
+        "tags": ["Book"],
+        "summary": "Finds All the Books",
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {},
+              "example": [
+                {
+                  "_id": "string",
+                  "title": "string",
+                  "author": "string",
+                  "available": true,
+                  "createdAt": "date",
+                  "updatedAt": "date",
+                  "__v": 0
+                },
+                {
+                  "_id": "string",
+                  "title": "string",
+                  "author": "string",
+                  "available": false,
+                  "createdAt": "date",
+                  "updatedAt": "date",
+                  "__v": 0
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Book"],
+        "summary": "Create a Book",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "available": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "example": {
+                "_id": "string",
+                "title": "string",
+                "author": "string",
+                "available": true,
+                "createdAt": "date",
+                "updatedAt": "date"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/book/{id}": {
+      "get": {
+        "tags": ["Book"],
+        "summary": "Finds a Book",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "book id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "example": {
+                "_id": "string",
+                "title": "string",
+                "author": "string",
+                "available": true,
+                "createdAt": "date",
+                "updatedAt": "date"
+              }
+            }
+          },
+          "400": {
+            "description": "Book does not exist"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Book"],
+        "summary": "Update a Book",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "book id",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization header for JWT",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "available": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "example": {
+                "_id": "string",
+                "title": "string",
+                "author": "string",
+                "available": true,
+                "createdAt": "date",
+                "updatedAt": "date"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Book"],
+        "summary": "Delete a Book",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "book id",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "/reservation": {
+      "get": {
+        "tags": ["Reservation"],
+        "summary": "Finds All the Reservations",
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "array",
+              "items": {},
+              "example": [
+                {
+                  "_id": "string",
+                  "book": "string",
+                  "user": "string",
+                  "date_reserved": "date",
+                  "date_due": "date"
+                },
+                {
+                  "_id": "string",
+                  "book": "string",
+                  "user": "string",
+                  "date_reserved": "date",
+                  "date_due": "date"
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Reservation"],
+        "summary": "Create a Reservation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "book": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string"
+                },
+                "date_reserved": {
+                  "type": "date"
+                },
+                "date_due": {
+                  "type": "date"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "example": {
+                "_id": "string",
+                "book": {
+                  "_id": "string",
+                  "title": "string",
+                  "author": "string"
+                },
+                "user": {
+                  "_id": "string",
+                  "username": "string",
+                  "email": "string"
+                },
+                "date_reserved": "date",
+                "date_due": "date"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    },
+    "/reservation/{id}": {
+      "get": {
+        "tags": ["Reservation"],
+        "summary": "Finds a Reservation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "reservation id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "example": {
+                "_id": "string",
+                "book": {
+                  "_id": "string",
+                  "title": "string",
+                  "author": "string"
+                },
+                "user": {
+                  "_id": "string",
+                  "username": "string",
+                  "email": "string"
+                },
+                "date_reserved": "date",
+                "date_due": "date"
+              }
+            }
+          },
+          "400": {
+            "description": "Reservation does not exist"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Reservation"],
+        "summary": "Update a Reservation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "reservation id",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "string"
+                },
+                "book": {
+                  "type": "string"
+                },
+                "date_reserved": {
+                  "type": "string"
+                },
+                "date_due": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "example": {
+                "_id": "string",
+                "book": {
+                  "_id": "string",
+                  "title": "string",
+                  "author": "string"
+                },
+                "user": {
+                  "_id": "string",
+                  "username": "string",
+                  "email": "string"
+                },
+                "date_reserved": "date",
+                "date_due": "date"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Reservation"],
+        "summary": "Delete a Reservation",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "reservation id",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "/reservation/{userId}/all": {
+      "get": {
+        "tags": ["Reservation"],
+        "summary": "Finds All the Reservations of a User",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "type": "string",
+            "description": "user id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "array",
+              "items": {},
+              "example": [
+                {
+                  "_id": "string",
+                  "book": {
+                    "_id": "bookId",
+                    "title": "string",
+                    "author": "string"
+                  },
+                  "user": {
+                    "_id": "userId",
+                    "username": "string",
+                    "email": "string"
+                  },
+                  "date_reserved": "date",
+                  "date_due": "date"
+                },
+                {
+                  "_id": "string",
+                  "book": {
+                    "_id": "bookId",
+                    "title": "string",
+                    "author": "string"
+                  },
+                  "user": {
+                    "_id": "userId",
+                    "username": "string",
+                    "email": "string"
+                  },
+                  "date_reserved": "date",
+                  "date_due": "date"
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "User does not exist"
+          }
+        }
+      }
+    },
+    "/reservation/book/{bookId}": {
+      "get": {
+        "tags": ["Reservation"],
+        "summary": "Finds a book reservated",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "type": "string",
+            "description": "book id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "object",
+              "example": [
+                {
+                  "_id": "string",
+                  "book": {
+                    "_id": "string",
+                    "title": "string",
+                    "author": "string"
+                  },
+                  "user": {
+                    "_id": "userId",
+                    "username": "string",
+                    "email": "string"
+                  },
+                  "date_reserved": "date",
+                  "date_due": "date"
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Book does not exist"
+          }
+        }
+      }
+    }
+  }
+}
