@@ -8,7 +8,7 @@ module.exports = ({ ReservationController }) => {
   router.get(
     '/',
     cacheMiddleware(CACHE_TIME.ONE_HOUR),
-    ReservationController.getReservations
+    ReservationController.getAllReservations
   );
   router.get(
     '/:reservationId',

@@ -33,7 +33,7 @@ class ReservationController {
     return res.send(reservationDeleted);
   }
 
-  async getReservations(req, res) {
+  async getAllReservations(req, res) {
     const reservations = await _reservationService.getAll();
     return res.send(reservations);
   }
