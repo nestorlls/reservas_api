@@ -32,31 +32,36 @@ class ReservationService extends BaseService {
     const userExist = await _userRepository.getById(user);
     const bookExist = await _bookRepository.getById(book);
 
-    if (!userExist && !bookExist) {
+    if (!userExist || !bookExist) {
       const error = new Error();
       error.status = 400;
       error.message = 'User or book does not exist';
       return error;
     }
 
-    if (!bookExist.available) {
+    if (!bookExist?.available) {
       const error = new Error();
       error.status = 400;
       error.message = 'Book is reserved already';
       return error;
     }
 
-    await _bookRepository.update(bookExist._id, {
-      available: false,
-    });
-
-    return await _reservationRepository.create({
-      user: userExist._id,
-      book: bookExist._id,
+    const res = await _reservationRepository.create({
+      user: userExist?._id,
+      book: bookExist?._id,
       date_reserved: date_reserved || new Date(),
       date_due:
-        date_due || new Date(date_reserved).setDate(new Date().getDate() + 7),
+        new Date(date_reserved).setDate(new Date().getDate() + 7) ||
+        new Date().setDate(new Date().getDate() + 7),
     });
+
+    if (res) {
+      await _bookRepository.update(bookExist._id, {
+        available: false,
+      });
+    }
+
+    return res;
   }
 
   async updateReservation(reservationId, reservation) {
@@ -98,11 +103,17 @@ class ReservationService extends BaseService {
       return error;
     }
 
-    await _bookRepository.update(reservation.book, {
-      available: true,
-    });
+    const isReservationDeleted = await _reservationRepository.delete(
+      reservationId
+    );
 
-    return await _reservationRepository.delete(reservationId);
+    if (isReservationDeleted) {
+      await _bookRepository.update(reservation.book, {
+        available: true,
+      });
+    }
+
+    return isReservationDeleted;
   }
 
   async getUserReservations(userId) {
