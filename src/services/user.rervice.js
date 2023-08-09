@@ -1,4 +1,5 @@
 const BaseService = require('./base.service');
+const { isValidObjectId } = require('mongoose');
 
 let _userRepository = null;
 let _reservationService = null;
@@ -11,6 +12,13 @@ class UserService extends BaseService {
   }
 
   async getById(userId) {
+    if (!isValidObjectId(userId)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'User id is required';
+      return error;
+    }
+
     const userFound = await _userRepository.getById(userId);
 
     if (!userFound) {
@@ -24,6 +32,13 @@ class UserService extends BaseService {
   }
 
   async updateUser(userId, user) {
+    if (!isValidObjectId(userId)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'User id is required';
+      return error;
+    }
+
     const userFound = await _userRepository.getById(userId);
 
     if (!userFound) {
@@ -37,6 +52,13 @@ class UserService extends BaseService {
   }
 
   async deleteUser(userId) {
+    if (!isValidObjectId(userId)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'User id is required';
+      return error;
+    }
+
     const userFound = await _userRepository.getById(userId);
 
     if (!userFound) {
@@ -52,7 +74,9 @@ class UserService extends BaseService {
 
     if (userReservationFound.length >= 1) {
       for (const reservation of userReservationFound) {
-        await _reservationService.deleteReservation(reservation._id);
+        if (isValidObjectId(reservation._id)) {
+          await _reservationService.deleteReservation(reservation._id);
+        }
       }
     }
 

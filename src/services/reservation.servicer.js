@@ -1,4 +1,5 @@
 const BaseService = require('./base.service');
+const { isValidObjectId } = require('mongoose');
 
 let _reservationRepository = null;
 let _userRepository = null;
@@ -22,10 +23,24 @@ class ReservationService extends BaseService {
       return error;
     }
 
+    if (!date_reserved || !date_due) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Date reserved or date due is required';
+      return error;
+    }
+
     if (new Date(date_reserved) < new Date()) {
       const error = new Error();
       error.status = 400;
       error.message = 'Date reserved must be greater than date now';
+      return error;
+    }
+
+    if (new Date(date_due) <= new Date(date_reserved)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Date due must be greater than date reserved';
       return error;
     }
 
@@ -49,10 +64,8 @@ class ReservationService extends BaseService {
     const res = await _reservationRepository.create({
       user: userExist?._id,
       book: bookExist?._id,
-      date_reserved: date_reserved || new Date(),
-      date_due:
-        new Date(date_reserved).setDate(new Date().getDate() + 7) ||
-        new Date().setDate(new Date().getDate() + 7),
+      date_reserved: date_reserved,
+      date_due: date_due,
     });
 
     if (res) {
@@ -65,6 +78,15 @@ class ReservationService extends BaseService {
   }
 
   async updateReservation(reservationId, reservation) {
+    const { date_reserved, date_due } = reservation;
+
+    if (!isValidObjectId(reservationId)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Reservation id is required';
+      return error;
+    }
+
     const reservationFound = await _reservationRepository.getById(
       reservationId
     );
@@ -76,10 +98,31 @@ class ReservationService extends BaseService {
       return error;
     }
 
+    if (new Date(date_reserved) < new Date()) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Date reserved must be greater than date now';
+      return error;
+    }
+
+    if (new Date(date_due) <= new Date(date_reserved)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Date due must be greater than date reserved';
+      return error;
+    }
+
     return await _reservationRepository.update(reservationId, reservation);
   }
 
   async getReservationById(reservationId) {
+    if (!isValidObjectId(reservationId)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Reservation id is required';
+      return error;
+    }
+
     const reservationFound = await _reservationRepository.getById(
       reservationId
     );
@@ -94,6 +137,13 @@ class ReservationService extends BaseService {
   }
 
   async deleteReservation(reservationId) {
+    if (!isValidObjectId(reservationId)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Reservation id is required';
+      return error;
+    }
+
     const reservation = await _reservationRepository.getById(reservationId);
 
     if (!reservation) {
@@ -117,6 +167,13 @@ class ReservationService extends BaseService {
   }
 
   async getUserReservations(userId) {
+    if (!isValidObjectId(userId)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'User id is required';
+      return error;
+    }
+
     const userFound = await _userRepository.getById(userId);
     if (!userFound) {
       const error = new Error();
@@ -129,7 +186,7 @@ class ReservationService extends BaseService {
   }
 
   async getBookReservation(bookId) {
-    if (!bookId) {
+    if (!isValidObjectId(bookId)) {
       const error = new Error();
       error.status = 400;
       error.message = 'Book id is required';

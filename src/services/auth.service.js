@@ -29,7 +29,7 @@ class AuthService {
 
     if (!userExists) {
       const error = new Error();
-      error.status = 401;
+      error.status = 400;
       error.message = 'User does not exist';
       return error;
     }
@@ -39,7 +39,7 @@ class AuthService {
     if (!isPasswordCorrect) {
       const error = new Error();
       error.status = 401;
-      error.message = 'Invalid credentials';
+      error.message = 'Invalid password';
       return error;
     }
 
