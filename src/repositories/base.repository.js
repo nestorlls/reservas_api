@@ -21,12 +21,7 @@ class BaseRepository {
   }
 
   async getById(id) {
-    let res = null;
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
-      res = await this.model.findById(id);
-    }
-
-    return res;
+    return await this.model.findById(id);
   }
 }
 
