@@ -27,21 +27,15 @@ class AuthService {
 
     const userExists = await _userService.getByUsername(username);
 
-    if (!userExists) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User does not exist';
-      return error;
-    }
+    this.isValidValue({ value: userExists, message: 'User does not exist' });
 
     const isPasswordCorrect = await userExists.comparePassword(password);
 
-    if (!isPasswordCorrect) {
-      const error = new Error();
-      error.status = 401;
-      error.message = 'Invalid password';
-      return error;
-    }
+    this.isValidValue({
+      value: isPasswordCorrect,
+      status: 401,
+      message: 'Invalid password',
+    });
 
     const userToEncode = {
       id: userExists.id,
@@ -55,6 +49,15 @@ class AuthService {
       token,
       user: userToEncode,
     };
+  }
+
+  isValidValue({ value, status, message }) {
+    if (!value) {
+      const error = new Error();
+      error.status = status;
+      error.message = message;
+      throw error;
+    }
   }
 }
 
