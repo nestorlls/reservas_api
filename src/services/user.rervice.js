@@ -12,61 +12,37 @@ class UserService extends BaseService {
   }
 
   async getById(userId) {
-    if (!isValidObjectId(userId)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User id is required';
-      return error;
-    }
+    this.isValidId({ id: userId, message: 'invalid Id or Id is required' });
 
     const userFound = await _userRepository.getById(userId);
 
-    if (!userFound) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User does not exist';
-      return error;
-    }
+    this.isValidValue({ value: userFound, message: 'User does not exist' });
 
     return userFound;
   }
 
   async updateUser(userId, user) {
-    if (!isValidObjectId(userId)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User id is required';
-      return error;
-    }
+    this.isValidId({
+      id: userId,
+      message: 'Invalid id  or Id is required',
+    });
 
     const userFound = await _userRepository.getById(userId);
 
-    if (!userFound) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User does not exist';
-      return error;
-    }
+    this.isValidValue({ value: userFound, message: 'User does not exist' });
 
     return await _userRepository.update(userId, user);
   }
 
   async deleteUser(userId) {
-    if (!isValidObjectId(userId)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User id is required';
-      return error;
-    }
+    this.isValidId({
+      id: userId,
+      message: 'Invalid id or User id is required',
+    });
 
     const userFound = await _userRepository.getById(userId);
 
-    if (!userFound) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User does not exist';
-      return error;
-    }
+    this.isValidValue({ value: userFound, message: 'User does not exist' });
 
     const userReservationFound = await _reservationService.getUserReservations(
       userId
@@ -85,6 +61,24 @@ class UserService extends BaseService {
 
   async getByUsername(username) {
     return await _userRepository.getByUsername(username);
+  }
+
+  isValidId({ id, message }) {
+    if (!isValidObjectId(id)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = message;
+      throw error;
+    }
+  }
+
+  isValidValue({ value, message }) {
+    if (!value) {
+      const error = new Error();
+      error.status = 400;
+      error.message = message;
+      throw error;
+    }
   }
 }
 
