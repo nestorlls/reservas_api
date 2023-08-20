@@ -14,45 +14,60 @@ class BookService extends BaseService {
   }
 
   async getById(id) {
-    if (!isValidObjectId(id)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Correct Book id is required';
-      return error;
-    }
+    this.isValidId({ id, message: 'invalid Id or Id is required' });
 
-    return await _bookRepository.getById(id);
+    const bookFound = await _bookRepository.getById(id);
+
+    this.isValidValue({ value: bookFound, message: 'Book does not exist' });
+
+    return bookFound;
   }
 
   async update(id, book) {
-    if (!isValidObjectId(id)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Correct Book id is required';
-      return error;
-    }
+    this.isValidId({ id, message: 'invalid Id or Id is required' });
+
+    const bookFound = await _bookRepository.getById(id);
+
+    this.isValidValue({ value: bookFound, message: 'Book does not exist' });
 
     return await _bookRepository.update(id, book);
   }
 
   async delete(id) {
-    if (!isValidObjectId(id)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Correct Book id is required';
-      return error;
-    }
+    this.isValidId({ id, message: 'invalid Id or Id is required' });
+
+    const bookFound = await _bookRepository.getById(id);
+
+    this.isValidValue({ value: bookFound, message: 'Book does not exist' });
 
     return await _bookRepository.delete(id);
   }
 
   async createBook(book) {
-    const { title, author, available } = book;
+    const { title, author } = book;
     return await _bookRepository.create({
       title,
       author,
       available: true,
     });
+  }
+
+  isValidId({ id, message }) {
+    if (!isValidObjectId(id)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = message;
+      throw error;
+    }
+  }
+
+  isValidValue({ value, message }) {
+    if (!value) {
+      const error = new Error();
+      error.status = 400;
+      error.message = message;
+      throw error;
+    }
   }
 }
 
