@@ -16,24 +16,22 @@ class ReservationService extends BaseService {
   async createReservation(reservation) {
     const { user, book, date_reserved, date_due } = reservation;
 
-    if (!user || !book) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User or book is required';
-      return error;
-    }
-
-    if (!date_reserved || !date_due) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Date reserved or date due is required';
-      return error;
-    }
+    // Validates
+    this.isValidId({
+      id: book,
+      message: 'Invalid Book or Book is required',
+    });
+    this.isValidId({ id: user, message: 'Invalid User or User is required' });
+    this.isValidValue({
+      value: date_reserved,
+      message: 'Date reserved is required',
+    });
+    this.isValidValue({ value: date_due, message: 'Date due is required' });
 
     if (new Date(date_reserved) < new Date()) {
       const error = new Error();
       error.status = 400;
-      error.message = 'Date reserved must be greater than date now';
+      error.message = 'Date reserved must be greater than current date';
       return error;
     }
 
@@ -47,56 +45,46 @@ class ReservationService extends BaseService {
     const userExist = await _userRepository.getById(user);
     const bookExist = await _bookRepository.getById(book);
 
-    if (!userExist || !bookExist) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User or book does not exist';
-      return error;
-    }
+    this.isValidValue({ value: userExist, message: 'User does not exist' });
+    this.isValidValue({ value: bookExist, message: 'Book does not exist' });
+    this.isValidValue({
+      value: bookExist.available,
+      message: 'Book is reserved already',
+    });
 
-    if (!bookExist?.available) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Book is reserved already';
-      return error;
-    }
-
-    const res = await _reservationRepository.create({
+    const reservationCreated = await _reservationRepository.create({
       user: userExist?._id,
       book: bookExist?._id,
       date_reserved: date_reserved,
       date_due: date_due,
     });
 
-    if (res) {
+    if (reservationCreated) {
       await _bookRepository.update(bookExist._id, {
         available: false,
       });
     }
 
-    return res;
+    return reservationCreated;
   }
 
   async updateReservation(reservationId, reservation) {
     const { date_reserved, date_due } = reservation;
 
-    if (!isValidObjectId(reservationId)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Reservation id is required';
-      return error;
-    }
+    // validates
+    this.isValidId({
+      id: reservationId,
+      message: 'Invalid id or Reservation id is required',
+    });
 
     const reservationFound = await _reservationRepository.getById(
       reservationId
     );
 
-    if (!reservationFound) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Reservation does not exist';
-      return error;
-    }
+    this.isValidValue({
+      value: reservationFound,
+      message: 'Reservation does not exist',
+    });
 
     if (new Date(date_reserved) < new Date()) {
       const error = new Error();
@@ -116,42 +104,35 @@ class ReservationService extends BaseService {
   }
 
   async getReservationById(reservationId) {
-    if (!isValidObjectId(reservationId)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Reservation id is required';
-      return error;
-    }
+    this.isValidId({
+      id: reservationId,
+      message: 'Invalid id or Reservation id is required',
+    });
 
     const reservationFound = await _reservationRepository.getById(
       reservationId
     );
-    if (!reservationFound) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Reservation does not exist';
-      return error;
-    }
+
+    this.isValidValue({
+      value: reservationFound,
+      message: 'Reservation does not exist',
+    });
 
     return reservationFound;
   }
 
   async deleteReservation(reservationId) {
-    if (!isValidObjectId(reservationId)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Reservation id is required';
-      return error;
-    }
+    this.isValidId({
+      id: reservationId,
+      message: 'Invalid id or Reservation id is required',
+    });
 
     const reservation = await _reservationRepository.getById(reservationId);
 
-    if (!reservation) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Reservation does not exist';
-      return error;
-    }
+    this.isValidValue({
+      value: reservation,
+      message: 'Reservation does not exist',
+    });
 
     const isReservationDeleted = await _reservationRepository.delete(
       reservationId
@@ -167,41 +148,50 @@ class ReservationService extends BaseService {
   }
 
   async getUserReservations(userId) {
-    if (!isValidObjectId(userId)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User id is required';
-      return error;
-    }
+    this.isValidId({
+      id: userId,
+      message: 'Invalid id or User id is required',
+    });
 
     const userFound = await _userRepository.getById(userId);
-    if (!userFound) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User does not exist';
-      return error;
-    }
+
+    this.isValidValue({
+      value: userFound,
+      message: 'User does not exist',
+    });
 
     return await _reservationRepository.getUserReservations(userId);
   }
 
   async getBookReservation(bookId) {
-    if (!isValidObjectId(bookId)) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Book id is required';
-      return error;
-    }
+    this.isValidId({
+      id: bookId,
+      message: 'Invalid id or Book id is required',
+    });
 
     const bookFound = await _bookRepository.getById(bookId);
-    if (!bookFound) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Book does not exist';
-      return error;
-    }
+
+    this.isValidValue({ value: bookFound, message: 'Book does not exist' });
 
     return await _reservationRepository.getBookReservation(bookId);
+  }
+
+  isValidId({ id, message }) {
+    if (!isValidObjectId(id)) {
+      const error = new Error();
+      error.status = 400;
+      error.message = message;
+      throw error;
+    }
+  }
+
+  isValidValue({ value, message }) {
+    if (!value) {
+      const error = new Error();
+      error.status = 400;
+      error.message = message;
+      throw error;
+    }
   }
 }
 
