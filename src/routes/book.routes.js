@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { AuthMiddleware, cacheMiddleware } = require('../middlewares');
+const { cacheMiddleware } = require('../middlewares');
 const { CACHE_TIME } = require('../helpers');
 
 module.exports = ({ BookController }) => {
@@ -11,9 +11,9 @@ module.exports = ({ BookController }) => {
     cacheMiddleware(CACHE_TIME.ONE_HOUR),
     BookController.getById
   );
-  router.post('/', AuthMiddleware, BookController.create);
-  router.put('/:bookId', AuthMiddleware, BookController.update);
-  router.delete('/:bookId', AuthMiddleware, BookController.delete);
+  router.post('/', BookController.create);
+  router.put('/:bookId', BookController.update);
+  router.delete('/:bookId', BookController.delete);
 
   return router;
 };

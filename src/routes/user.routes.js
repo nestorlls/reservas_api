@@ -7,8 +7,8 @@ module.exports = ({ UserController }) => {
 
   router.get('/', cacheMiddleware(CACHE_TIME.ONE_HOUR), UserController.getAll);
   router.get('/:userId', UserController.getById);
-  router.put('/:userId', AuthMiddleware, UserController.update);
-  router.delete('/:userId', AuthMiddleware, UserController.delete);
+  router.put('/:userId', UserController.update);
+  router.delete('/:userId', UserController.delete);
 
   return router;
 };

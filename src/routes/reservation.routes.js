@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { AuthMiddleware, cacheMiddleware } = require('../middlewares');
+const { cacheMiddleware } = require('../middlewares');
 const { CACHE_TIME } = require('../helpers');
 
 module.exports = ({ ReservationController }) => {
@@ -25,17 +25,9 @@ module.exports = ({ ReservationController }) => {
     cacheMiddleware(CACHE_TIME.ONE_HOUR),
     ReservationController.getBookReservation
   );
-  router.post('/', AuthMiddleware, ReservationController.createReservation);
-  router.put(
-    '/:reservationId',
-    AuthMiddleware,
-    ReservationController.updateReservation
-  );
-  router.delete(
-    '/:reservationId',
-    AuthMiddleware,
-    ReservationController.deleteReservation
-  );
+  router.post('/', ReservationController.createReservation);
+  router.put('/:reservationId', ReservationController.updateReservation);
+  router.delete('/:reservationId', ReservationController.deleteReservation);
 
   return router;
 };
