@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 mongoose
   .connect(MONGODB_URL, { useNewUrlParser: true })
   .then(() => {
+    console.log('Connected to MongoDB');
     server.start();
   })
   .catch((err) => {
