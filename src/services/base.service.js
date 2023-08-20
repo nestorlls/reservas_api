@@ -8,16 +8,10 @@ class BaseService {
   }
 
   async update(id, entity) {
-    if (!id) {
-      throw new Error({ status: 400, message: 'Id is required' });
-    }
     return await this.repository.update(id, entity);
   }
 
   async delete(id) {
-    if (!id) {
-      throw new Error({ status: 400, message: 'Id is required' });
-    }
     return await this.repository.delete(id);
   }
 
