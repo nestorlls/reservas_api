@@ -44,10 +44,11 @@ class BookService extends BaseService {
   }
 
   async createBook(book) {
-    const { title, author } = book;
+    const { title, author, description } = book;
     return await _bookRepository.create({
       title,
       author,
+      description,
       available: true,
     });
   }
