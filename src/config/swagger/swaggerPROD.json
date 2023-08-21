@@ -131,6 +131,9 @@
                 "updatedAt": "date"
               }
             }
+          },
+          "400": {
+            "description": "User does not exist"
           }
         }
       },
@@ -274,6 +277,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "User does not exist"
+          },
+          "401": {
+            "description": "Invalid password"
           }
         }
       }
@@ -362,6 +371,9 @@
                 "updatedAt": "date"
               }
             }
+          },
+          "400": {
+            "description": "Book already exists"
           }
         }
       }
@@ -452,6 +464,9 @@
                 "updatedAt": "date"
               }
             }
+          },
+          "400": {
+            "description": "Book does not exist"
           }
         }
       },
@@ -481,6 +496,9 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          "400": {
+            "description": "Book does not exist"
           }
         }
       }
@@ -577,7 +595,7 @@
             }
           },
           "400": {
-            "description": "Invalid status value"
+            "description": "Book is already reserved"
           }
         }
       }
@@ -685,6 +703,9 @@
                 "date_due": "date"
               }
             }
+          },
+          "400": {
+            "description": "Reservation does not exist"
           }
         }
       },
@@ -714,6 +735,9 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          "400": {
+            "description": "Reservation does not exist"
           }
         }
       }
