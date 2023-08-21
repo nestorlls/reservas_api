@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "title": "Swagger Reservas de libros"
   },
-  "host": "https://reservasapi-production.up.railway.app",
+  "host": "reservasapi-production.up.railway.app",
   "basePath": "/api",
   "schemes": ["http", "https"],
   "paths": {
