@@ -26,7 +26,8 @@ class BookController {
   }
 
   async getAll(req, res) {
-    const books = await _bookService.getAll();
+    const { page, pageSize } = req.query;
+    const books = await _bookService.getAll(pageSize, page);
     return res.send(books);
   }
 

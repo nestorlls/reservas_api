@@ -19,7 +19,11 @@ class AuthService {
       return error;
     }
 
-    return await _userService.create(user);
+    return await _userService.create({
+      username: user.username,
+      email: user.email,
+      password: '12345678',
+    });
   }
 
   async signin(user) {

@@ -34,7 +34,8 @@ class ReservationController {
   }
 
   async getAllReservations(req, res) {
-    const reservations = await _reservationService.getAll();
+    const { page, pageSize } = req.query;
+    const reservations = await _reservationService.getAll(pageSize, page);
     return res.send(reservations);
   }
 
